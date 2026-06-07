@@ -1,0 +1,13 @@
+[package]
+name = "dnp3-tcp"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+readme.workspace = true
+description = "Async TCP transport for DNP3"
+
+[dependencies]
+dnp3-core = { path = "../dnp3-core" }
+dnp3-link = { path = "../dnp3-link" }
+thiserror.workspace = true
+tokio.workspace = true

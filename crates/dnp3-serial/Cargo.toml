@@ -1,0 +1,15 @@
+[package]
+name = "dnp3-serial"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+readme.workspace = true
+description = "Serial transport and mock serial utilities for DNP3"
+
+[dependencies]
+async-trait.workspace = true
+dnp3-core = { path = "../dnp3-core" }
+dnp3-link = { path = "../dnp3-link" }
+serialport.workspace = true
+thiserror.workspace = true
+tokio.workspace = true

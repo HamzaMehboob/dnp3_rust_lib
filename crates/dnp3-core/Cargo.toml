@@ -1,0 +1,10 @@
+[package]
+name = "dnp3-core"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+readme.workspace = true
+description = "Core DNP3 protocol primitives, CRC, encoding, time, and errors"
+
+[dependencies]
+thiserror.workspace = true

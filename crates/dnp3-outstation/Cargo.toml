@@ -1,0 +1,19 @@
+[package]
+name = "dnp3-outstation"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+readme.workspace = true
+description = "DNP3 outstation/server role helpers"
+
+[dependencies]
+async-trait.workspace = true
+dnp3-app = { path = "../dnp3-app" }
+dnp3-core = { path = "../dnp3-core" }
+dnp3-link = { path = "../dnp3-link" }
+dnp3-transport = { path = "../dnp3-transport" }
+thiserror.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+dnp3-master = { path = "../dnp3-master" }

@@ -1,0 +1,55 @@
+[package]
+name = "dnp3-workspace"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license-file = "LICENSE"
+description = "Rust workspace for DNP3 / IEEE 1815 protocol communication and tooling"
+
+[workspace]
+resolver = "2"
+members = [
+    "crates/dnp3-core",
+    "crates/dnp3-link",
+    "crates/dnp3-transport",
+    "crates/dnp3-app",
+    "crates/dnp3-master",
+    "crates/dnp3-outstation",
+    "crates/dnp3-tcp",
+    "crates/dnp3-serial",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license-file = "../../LICENSE"
+repository = ""
+homepage = ""
+readme = "../../README.md"
+
+[workspace.dependencies]
+async-trait = "0.1"
+bytes = "1"
+clap = { version = "4", features = ["derive"] }
+proptest = "1"
+serialport = "4"
+thiserror = "2"
+tokio = { version = "1", features = ["io-util", "macros", "net", "rt-multi-thread", "sync", "time"] }
+tokio-util = { version = "0.7", features = ["codec"] }
+tracing = "0.1"
+
+[dependencies]
+async-trait.workspace = true
+dnp3-core = { path = "crates/dnp3-core" }
+dnp3-link = { path = "crates/dnp3-link" }
+dnp3-transport = { path = "crates/dnp3-transport" }
+dnp3-app = { path = "crates/dnp3-app" }
+dnp3-master = { path = "crates/dnp3-master" }
+dnp3-outstation = { path = "crates/dnp3-outstation" }
+dnp3-tcp = { path = "crates/dnp3-tcp" }
+dnp3-serial = { path = "crates/dnp3-serial" }
+clap.workspace = true
+tokio.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true

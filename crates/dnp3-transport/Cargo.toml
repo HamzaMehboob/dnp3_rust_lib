@@ -1,0 +1,14 @@
+[package]
+name = "dnp3-transport"
+version.workspace = true
+edition.workspace = true
+license-file.workspace = true
+readme.workspace = true
+description = "DNP3 transport-layer fragmentation and reassembly"
+
+[dependencies]
+dnp3-core = { path = "../dnp3-core" }
+thiserror.workspace = true
+
+[dev-dependencies]
+proptest.workspace = true
