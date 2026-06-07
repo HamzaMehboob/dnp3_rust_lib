@@ -1,9 +1,7 @@
 use std::time::Duration;
 
 use async_trait::async_trait;
-use dnp3_app::{
-    AnalogInput, AnalogOutput, BinaryInput, BinaryOutput, Counter, FunctionCode,
-};
+use dnp3_app::{AnalogInput, AnalogOutput, BinaryInput, BinaryOutput, Counter, FunctionCode};
 use dnp3_link::LinkFrame;
 use dnp3_master::{MasterChannel, MasterConfig, MasterError, MasterSession};
 use dnp3_outstation::{

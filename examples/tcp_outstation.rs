@@ -108,11 +108,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 };
                 if verbose {
                     let rx_bytes = frame.encode();
-                    println!(
-                        "rx: {} | {}",
-                        describe_frame(&frame),
-                        hex_line(&rx_bytes)
-                    );
+                    println!("rx: {} | {}", describe_frame(&frame), hex_line(&rx_bytes));
                 }
                 match outstation.handle_frame(frame) {
                     Ok(responses) => {

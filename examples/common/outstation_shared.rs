@@ -91,7 +91,11 @@ pub fn parse_indexed_u32(s: &str) -> Result<IndexedU32, String> {
 /// DNP3 binary flags: bit 0 = state, bit 7 = online.
 /// OFF sends no flags; ON sets both state and online so masters display the value.
 pub fn binary_flags(on: bool) -> u8 {
-    if on { 0x81 } else { 0x00 }
+    if on {
+        0x81
+    } else {
+        0x00
+    }
 }
 
 pub fn analog_flags() -> u8 {
@@ -99,7 +103,11 @@ pub fn analog_flags() -> u8 {
 }
 
 pub fn on_off(on: bool) -> &'static str {
-    if on { "ON" } else { "OFF" }
+    if on {
+        "ON"
+    } else {
+        "OFF"
+    }
 }
 
 pub fn database_from_points(points: &PointConfig) -> Database {
@@ -299,10 +307,7 @@ pub fn print_cli_examples() {
     println!("  show        # verify");
 }
 
-pub fn start_interactive_cli_if_enabled(
-    no_interactive: bool,
-    database: &Arc<RwLock<Database>>,
-) {
+pub fn start_interactive_cli_if_enabled(no_interactive: bool, database: &Arc<RwLock<Database>>) {
     if no_interactive {
         return;
     }
@@ -316,7 +321,9 @@ pub fn print_outstation_startup(outstation: u16, master: u16, database: &Databas
         "outstation address {} (expects master {})",
         outstation, master
     );
-    println!("simulator/client config: master={master}, outstation={outstation}, points at index 0");
+    println!(
+        "simulator/client config: master={master}, outstation={outstation}, points at index 0"
+    );
     println!("database:");
     print_database_summary(database);
 }
@@ -425,18 +432,10 @@ pub fn spawn_interactive_cli(database: Arc<RwLock<Database>>) {
 
 pub fn print_database_summary(database: &Database) {
     for point in &database.binary_inputs {
-        println!(
-            "BI[{}]={}",
-            point.index,
-            on_off(point.flags & 0x01 != 0)
-        );
+        println!("BI[{}]={}", point.index, on_off(point.flags & 0x01 != 0));
     }
     for point in &database.binary_outputs {
-        println!(
-            "BO[{}]={}",
-            point.index,
-            on_off(point.flags & 0x01 != 0)
-        );
+        println!("BO[{}]={}", point.index, on_off(point.flags & 0x01 != 0));
     }
     for point in &database.analog_inputs {
         println!("AI[{}]={}", point.index, point.value);

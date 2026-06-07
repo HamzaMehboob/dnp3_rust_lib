@@ -105,10 +105,7 @@ impl OutstationSession {
     }
 
     /// Creates a session that shares a database with other sessions or tasks.
-    pub fn with_shared_database(
-        config: OutstationConfig,
-        database: Arc<RwLock<Database>>,
-    ) -> Self {
+    pub fn with_shared_database(config: OutstationConfig, database: Arc<RwLock<Database>>) -> Self {
         Self {
             config,
             database,
@@ -159,13 +156,13 @@ impl OutstationSession {
                 };
                 Ok(vec![ack])
             }
-            LinkFunction::Primary(PrimaryFunction::TestLinkStates) => Ok(vec![
-                LinkFrame::legacy_ack_with_fcb(
+            LinkFunction::Primary(PrimaryFunction::TestLinkStates) => {
+                Ok(vec![LinkFrame::legacy_ack_with_fcb(
                     frame.source,
                     self.config.outstation,
                     frame.control.fcb,
-                ),
-            ]),
+                )])
+            }
             LinkFunction::Primary(PrimaryFunction::RequestLinkStatus) => {
                 Ok(vec![LinkFrame::link_status(
                     frame.source,
@@ -222,14 +219,10 @@ impl OutstationSession {
         match request.function {
             FunctionCode::Read => {
                 let include_static = request.objects.iter().any(|object| {
-                    matches!(
-                        object,
-                        AppObject::IntegrityPoll | AppObject::ClassScan(_)
-                    )
+                    matches!(object, AppObject::IntegrityPoll | AppObject::ClassScan(_))
                 });
                 let objects = if include_static {
-                    self.database()
-                        .integrity_objects()
+                    self.database().integrity_objects()
                 } else {
                     Vec::new()
                 };
@@ -267,11 +260,7 @@ impl OutstationSession {
             .map(|segment| {
                 let payload = segment.encode();
                 let frame = if tool_style {
-                    LinkFrame::unconfirmed_user_data(
-                        destination,
-                        self.config.outstation,
-                        payload,
-                    )?
+                    LinkFrame::unconfirmed_user_data(destination, self.config.outstation, payload)?
                 } else {
                     LinkFrame::outstation_unconfirmed_user_data(
                         destination,
@@ -326,7 +315,8 @@ mod tests {
 
     #[test]
     fn reset_link_states_returns_standard_ack() {
-        let mut outstation = OutstationSession::new(OutstationConfig::default(), Database::default());
+        let mut outstation =
+            OutstationSession::new(OutstationConfig::default(), Database::default());
         let frame = LinkFrame::reset_link_states(Address::new(1024), Address::new(1));
         let responses = outstation.handle_frame(frame).unwrap();
         assert_eq!(responses.len(), 1);
@@ -419,7 +409,10 @@ mod tests {
         let encoded = response.encode().unwrap();
         assert_eq!(&encoded[..4], &[0xc0, 0x81, 0x00, 0x00]);
         // Range16 encoding: index in header, flags-only body (avoids client misreading 0x8100).
-        assert_eq!(&encoded[4..12], &[0x01, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x81]);
+        assert_eq!(
+            &encoded[4..12],
+            &[0x01, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x81]
+        );
     }
 
     #[test]

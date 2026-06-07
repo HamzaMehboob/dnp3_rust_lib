@@ -158,9 +158,9 @@ pub enum Qualifier {
 impl Qualifier {
     fn count(self) -> Result<usize> {
         match self {
-            Self::Count8(count)
-            | Self::CountAndPrefix16(count)
-            | Self::CountAndPrefix32(count) => Ok(usize::from(count)),
+            Self::Count8(count) | Self::CountAndPrefix16(count) | Self::CountAndPrefix32(count) => {
+                Ok(usize::from(count))
+            }
             Self::Count16(count) => Ok(usize::from(count)),
             _ => Err(ProtocolError::UnknownValue {
                 field: "object qualifier without count",
@@ -426,7 +426,7 @@ impl AppObject {
             } else {
                 decode_binary_like(header.qualifier, input)?
             })),
-            20 | 21 | 22 => Ok(Self::Counters(decode_counter_points(
+            20..=22 => Ok(Self::Counters(decode_counter_points(
                 header.group,
                 header.variation,
                 header.qualifier,
@@ -439,12 +439,8 @@ impl AppObject {
                 input,
             )?)),
             40 | 42 => {
-                let points = decode_analog_points(
-                    header.group,
-                    header.variation,
-                    header.qualifier,
-                    input,
-                )?;
+                let points =
+                    decode_analog_points(header.group, header.variation, header.qualifier, input)?;
                 Ok(Self::AnalogOutputs(
                     points.into_iter().map(Into::into).collect(),
                 ))
@@ -582,7 +578,10 @@ fn skip_object_body(qualifier: Qualifier, input: &mut Reader<'_>) -> Result<()> 
     Ok(())
 }
 
-fn decode_binary_output_packed(qualifier: Qualifier, input: &mut Reader<'_>) -> Result<Vec<BinaryOutput>> {
+fn decode_binary_output_packed(
+    qualifier: Qualifier,
+    input: &mut Reader<'_>,
+) -> Result<Vec<BinaryOutput>> {
     match qualifier {
         Qualifier::Indexed32(index) => {
             let flags = input.read_u8()?;
@@ -605,7 +604,7 @@ fn is_simulator_indexed_qualifier(code: u8) -> bool {
         code,
         0x38 | 0x58 | 0x61 | 0x82 | 0x8f | 0x9f | 0xa2 | 0xad | 0xb2 | 0xd8 | 0xf8
     ) || ((code & 0x0F) == 0x0F && code >> 4 >= 0x8)
-        || (code >> 4 >= 0xA && matches!(code & 0x0F, 0x0C | 0x0D | 0x0E))
+        || (code >> 4 >= 0xA && matches!(code & 0x0F, 0x0C..=0x0E))
 }
 
 fn is_event_group(group: u8) -> bool {
@@ -614,13 +613,14 @@ fn is_event_group(group: u8) -> bool {
 
 fn packed_binary_flags(byte: u8, index_offset: usize) -> u8 {
     let on = (byte >> index_offset) & 0x01 != 0;
-    if on { 0x81 } else { 0x00 }
+    if on {
+        0x81
+    } else {
+        0x00
+    }
 }
 
-fn decode_binary_packed(
-    qualifier: Qualifier,
-    input: &mut Reader<'_>,
-) -> Result<Vec<BinaryInput>> {
+fn decode_binary_packed(qualifier: Qualifier, input: &mut Reader<'_>) -> Result<Vec<BinaryInput>> {
     match qualifier {
         Qualifier::Range16 { start, stop } => {
             let count = range16_count(start, stop)?;
@@ -1220,10 +1220,7 @@ mod tests {
         }])
         .encode(&mut encoded)
         .unwrap();
-        assert_eq!(
-            &encoded,
-            &[0x01, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x81]
-        );
+        assert_eq!(&encoded, &[0x01, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x81]);
     }
 
     #[test]

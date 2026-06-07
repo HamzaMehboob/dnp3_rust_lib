@@ -26,11 +26,23 @@ struct Args {
     stop_bits: StopBitsArg,
     #[arg(long, default_value_t = 1000)]
     timeout_ms: u64,
-    #[arg(long, default_value_t = 1, help = "Local master address (must match outstation)")]
+    #[arg(
+        long,
+        default_value_t = 1,
+        help = "Local master address (must match outstation)"
+    )]
     master: u16,
-    #[arg(long, default_value_t = 10, help = "Remote outstation address (must match outstation)")]
+    #[arg(
+        long,
+        default_value_t = 10,
+        help = "Remote outstation address (must match outstation)"
+    )]
     outstation: u16,
-    #[arg(long, default_value_t = 2000, help = "Milliseconds between integrity polls (0 = no delay)")]
+    #[arg(
+        long,
+        default_value_t = 2000,
+        help = "Milliseconds between integrity polls (0 = no delay)"
+    )]
     poll_interval_ms: u64,
 }
 

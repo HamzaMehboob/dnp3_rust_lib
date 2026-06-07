@@ -16,15 +16,31 @@ use shared::{print_response, run_link_startup};
 struct Args {
     #[arg(long, default_value = "127.0.0.1:20000", alias = "bind")]
     connect: String,
-    #[arg(long, default_value_t = 1, help = "Local master address (must match outstation)")]
+    #[arg(
+        long,
+        default_value_t = 1,
+        help = "Local master address (must match outstation)"
+    )]
     master: u16,
-    #[arg(long, default_value_t = 10, help = "Remote outstation address (must match outstation)")]
+    #[arg(
+        long,
+        default_value_t = 10,
+        help = "Remote outstation address (must match outstation)"
+    )]
     outstation: u16,
     #[arg(long, default_value_t = 5000)]
     timeout_ms: u64,
-    #[arg(long, default_value_t = 2000, help = "Milliseconds between integrity polls (0 = no delay)")]
+    #[arg(
+        long,
+        default_value_t = 2000,
+        help = "Milliseconds between integrity polls (0 = no delay)"
+    )]
     poll_interval_ms: u64,
-    #[arg(long, default_value_t = 2000, help = "Milliseconds between connect retries")]
+    #[arg(
+        long,
+        default_value_t = 2000,
+        help = "Milliseconds between connect retries"
+    )]
     retry_delay_ms: u64,
 }
 
